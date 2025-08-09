@@ -1,0 +1,299 @@
+<!-- START OF FULL ADMIN PAGE CODE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - Post News</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .checkbox-container input {
+      width: auto;
+      margin-right: 10px;
+    }
+    button {
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .preview {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #e9ecef;
+      border-radius: 10px;
+    }
+    .preview img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 10px;
+    }
+    .article-list {
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    .article-item {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    .article-item h4 {
+      margin: 0;
+    }
+    .article-item img {
+      width: 100px;
+      height: auto;
+      margin-top: 10px;
+    }
+    .article-actions {
+      margin-top: 10px;
+    }
+    .article-actions button {
+      width: auto;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Post a News Article</h2>
+    <form id="newsForm">
+      <input type="hidden" id="postId" />
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="content" placeholder="Content" rows="6" required></textarea>
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Tech">Tech</option>
+        <option value="Health">Health</option>
+        <option value="Business">Business</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Sports">Sports</option>
+      </select>
+      <input type="file" id="image" accept="image/*" />
+      
+      <!-- Featured Post Toggle -->
+      <div class="checkbox-container">
+        <input type="checkbox" id="isFeatured" />
+        <label for="isFeatured">Mark as Featured</label>
+      </div>
+
+      <button type="submit">Post News</button>
+    </form>
+
+    <!-- Live Preview -->
+    <div class="preview">
+      <h3>Preview</h3>
+      <p><strong>Title:</strong> <span id="previewTitle">—</span></p>
+      <p><strong>Content:</strong> <span id="previewContent">—</span></p>
+      <p><strong>Category:</strong> <span id="previewCategory">—</span></p>
+      <p><strong>Featured:</strong> <span id="previewFeatured">No</span></p>
+      <div>
+        <strong>Image Preview:</strong><br />
+        <img id="previewImage" src="" alt="Image will appear here" />
+      </div>
+    </div>
+  </div>
+
+  <!-- List of Articles -->
+  <div class="article-list" id="articleList"></div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtVvPjdsj84mWqaG4-7SyjbljCnslZ1SM",
+      authDomain: "hendaa-1.firebaseapp.com",
+      projectId: "hendaa-1",
+      storageBucket: "hendaa-1.appspot.com",
+      messagingSenderId: "831134776479",
+      appId: "1:831134776479:web:56cd7098fc69cd70a376aa"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // Preview listeners
+    document.getElementById("title").addEventListener("input", e => {
+      document.getElementById("previewTitle").textContent = e.target.value || '—';
+    });
+
+    document.getElementById("content").addEventListener("input", e => {
+      document.getElementById("previewContent").textContent = e.target.value || '—';
+    });
+
+    document.getElementById("category").addEventListener("change", e => {
+      document.getElementById("previewCategory").textContent = e.target.value || '—';
+    });
+
+    document.getElementById("isFeatured").addEventListener("change", e => {
+      document.getElementById("previewFeatured").textContent = e.target.checked ? "Yes" : "No";
+    });
+
+    document.getElementById("image").addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById("previewImage").src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        document.getElementById("previewImage").src = '';
+      }
+    });
+
+    // Form Submission
+    document.getElementById("newsForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const postId = document.getElementById("postId").value;
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      const category = document.getElementById("category").value.trim();
+      const isFeatured = document.getElementById("isFeatured").checked;
+      const imageFile = document.getElementById("image").files[0];
+
+      if (!title || !content || !category) {
+        alert("Title, content, and category are required.");
+        return;
+      }
+
+      try {
+        let imageUrl = "";
+        if (imageFile) {
+          const imageRef = storage.ref(`newsImages/${Date.now()}_${imageFile.name}`);
+          const uploadTaskSnapshot = await imageRef.put(imageFile);
+          imageUrl = await uploadTaskSnapshot.ref.getDownloadURL();
+        }
+
+        const postData = {
+  title,
+  content,
+  category,
+  isFeatured,
+  timestamp: new Date().toISOString(),
+  views: 0 // ← ADD THIS LINE
+};
+        if (imageUrl) postData.imageUrl = imageUrl;
+
+        if (postId) {
+          await db.collection("newsPosts").doc(postId).update(postData);
+          alert("Post updated.");
+        } else {
+          const newDoc = db.collection("newsPosts").doc();
+          await newDoc.set({ id: newDoc.id, ...postData, imageUrl });
+          alert("Post created.");
+        }
+
+        document.getElementById("newsForm").reset();
+        resetPreview();
+        loadArticles();
+
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error posting news.");
+      }
+    });
+
+    function resetPreview() {
+      document.getElementById("previewTitle").textContent = '—';
+      document.getElementById("previewContent").textContent = '—';
+      document.getElementById("previewCategory").textContent = '—';
+      document.getElementById("previewFeatured").textContent = 'No';
+      document.getElementById("previewImage").src = '';
+      document.getElementById("postId").value = '';
+    }
+
+    async function loadArticles() {
+      const articleList = document.getElementById("articleList");
+      articleList.innerHTML = "";
+      const snapshot = await db.collection("newsPosts").orderBy("timestamp", "desc").get();
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "article-item";
+        div.innerHTML = `
+          <h4>${data.title}</h4>
+          <p><strong>Category:</strong> ${data.category}</p>
+<p><strong>Featured:</strong> ${data.isFeatured ? "Yes" : "No"}</p>
+<p><strong>Views:</strong> ${data.views || 0}</p>
+          ${data.imageUrl ? `<img src="${data.imageUrl}" />` : ""}
+          <div class="article-actions">
+            <button onclick="editArticle('${doc.id}')">Edit</button>
+            <button onclick="deleteArticle('${doc.id}')">Delete</button>
+          </div>
+        `;
+        articleList.appendChild(div);
+      });
+    }
+
+    async function editArticle(id) {
+      const doc = await db.collection("newsPosts").doc(id).get();
+      if (!doc.exists) return alert("Post not found.");
+
+      const data = doc.data();
+      document.getElementById("postId").value = data.id;
+      document.getElementById("title").value = data.title;
+      document.getElementById("content").value = data.content;
+      document.getElementById("category").value = data.category;
+      document.getElementById("isFeatured").checked = data.isFeatured;
+      document.getElementById("previewTitle").textContent = data.title;
+      document.getElementById("previewContent").textContent = data.content;
+      document.getElementById("previewCategory").textContent = data.category;
+      document.getElementById("previewFeatured").textContent = data.isFeatured ? "Yes" : "No";
+      document.getElementById("previewImage").src = data.imageUrl || '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function deleteArticle(id) {
+      if (!confirm("Are you sure you want to delete this article?")) return;
+      await db.collection("newsPosts").doc(id).delete();
+      alert("Article deleted.");
+      loadArticles();
+    }
+
+    loadArticles();
+  </script>
+</body>
+</html>
+<!-- END OF FULL ADMIN PAGE CODE -->
