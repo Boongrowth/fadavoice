@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Full Article</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Font Awesome (via Cloudflare CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="articlessss.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <button class="menu-toggle">&#9776;</button>
+    <h1><a href="index.html">Fada-Voice </a></h1>
+  </header>
+
+  <!-- NAVBAR -->
+  <div class="navbar" id="navbar">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <a href="popular.html">Popular Post</a>
+    <a href="featured.html">Featured Post</a>
+    <a href="latest.html">Latest Post</a>
+    <a href="about.html">About Us</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="advertise.html">Advertise with Us</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+
+  <!-- ARTICLE CONTENT -->
+  <div class="container" id="articleContainer">
+    <p>Loading article...</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About Us</a> | 
+      <a href="privacy.html">Privacy Policy</a> | 
+      <a href="advertise.html">Advertise</a> | 
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-whatsapp"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Toggle Navbar
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navbar = document.getElementById('navbar');
+    const closeBtn = document.getElementById('closeBtn');
+    menuToggle.addEventListener('click', () => {
+      navbar.classList.add('active');
+    });
+    closeBtn.addEventListener('click', () => {
+      navbar.classList.remove('active');
+    });
+
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtVvPjdsj84mWqaG4-7SyjbljCnslZ1SM",
+      authDomain: "hendaa-1.firebaseapp.com",
+      projectId: "hendaa-1",
+      storageBucket: "hendaa-1.appspot.com",
+      messagingSenderId: "831134776479",
+      appId: "1:831134776479:web:56cd7098fc69cd70a376aa"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const articleContainer = document.getElementById("articleContainer");
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get("id");
+
+    async function loadArticle() {
+      if (!articleId) {
+        articleContainer.innerHTML = "<p>Article not found.</p>";
+        return;
+      }
+
+      const docRef = db.collection("newsPosts").doc(articleId);
+
+      // 🔹 Increment views inside a transaction
+      await db.runTransaction(async (transaction) => {
+        const current = await transaction.get(docRef);
+        if (!current.exists) return;
+        const views = current.data().views || 0;
+        transaction.update(docRef, { views: views + 1 });
+      });
+
+      // 🔹 Get updated article
+      const doc = await docRef.get();
+      if (!doc.exists) {
+        articleContainer.innerHTML = "<p>Article not found.</p>";
+        return;
+      }
+      const article = doc.data();
+
+      // 🔹 Fetch Author
+      let authorName = "Unknown Author";
+      let authorId = "";
+      if (article.authorId) {
+        const authorDoc = await db.collection("authors").doc(article.authorId).get();
+        if (authorDoc.exists) {
+          authorName = authorDoc.data().name;
+          authorId = authorDoc.id;
+        }
+      }
+
+      const publishedDate = new Date(article.timestamp).toLocaleDateString();
+
+      // 🔹 Render Article
+      articleContainer.innerHTML = `
+        <div class="article-image">${article.imageUrl ? `<img src="${article.imageUrl}" alt="Article Image">` : ''}</div>
+        <div class="article-details">
+          <span>Category: ${article.category || 'N/A'}</span> | 
+          <span>Published: ${publishedDate}</span> | 
+          <span>Author: <a class="author-link" href="author.html?id=${authorId}">${authorName}</a></span> | 
+          <span>👁️ Views: ${article.views ? article.views + 1 : 1}</span>
+        </div>
+        <h2 class="article-title">${article.title}</h2>
+        <div class="article-content">${article.content.replace(/\n/g, '<br>')}</div>
+        <div class="share-buttons">
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" class="share-twitter"><i class="fab fa-twitter"></i></a>
+          <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}" target="_blank" class="share-whatsapp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="featured-section">
+          <h3>🌟 Featured News</h3>
+          <div class="featured-posts" id="featuredPosts">Loading featured posts...</div>
+        </div>
+      `;
+
+      loadFeaturedPosts();
+    }
+
+    async function loadFeaturedPosts() {
+      const featuredContainer = document.getElementById("featuredPosts");
+      const snapshot = await db.collection("newsPosts")
+        .where("isFeatured", "==", true)
+        .limit(3)
+        .get();
+      if (snapshot.empty) {
+        featuredContainer.innerHTML = "<p>No featured posts found.</p>";
+        return;
+      }
+      featuredContainer.innerHTML = "";
+      snapshot.forEach(doc => {
+        const post = doc.data();
+        const div = document.createElement("div");
+        div.className = "featured-post-card";
+        div.innerHTML = `
+          ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image">` : ''}
+          <h4><a href="article.html?id=${doc.id}">${post.title}</a></h4>
+        `;
+        featuredContainer.appendChild(div);
+      });
+    }
+
+    loadArticle();
+  </script>
+</body>
+</html>
