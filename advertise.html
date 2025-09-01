@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advertise with Us - Fada-Voice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1c2230;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: white;
+    }
+
+    /* HEADER */
+    header {
+      background-color: #1c2230;
+      color: white;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    header h1 a {
+      color: white;
+      text-decoration: none;
+    }
+    .menu-toggle {
+      position: absolute;
+      left: 20px;
+      font-size: 22px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      
+      background: #1c2230;
+      color: white;
+      transition: left 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .navbar.active {
+      left: 0;
+    }
+    .navbar-header {
+      display: flex;
+      border-bottom: 1px solid #ccc;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .navbar-header h2 {
+      margin: 10px;
+      color: #66aaff;
+    }
+    .close-btn {
+      font-size: 26px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+    }
+    .navbar a {
+      display: block;
+      padding: 12px 10px;
+      margin: 10px;
+      text-decoration: none;
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .navbar a:hover {
+      background: #007bff;
+    }
+    .navbar-footer {
+      font-size: 13px;
+      text-align: center;
+      color: #aaa;
+      margin-top: 20px;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #1c2230;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .container h2 {
+      color: #66aaff;
+      margin-bottom: 15px;
+    }
+    .section {
+      margin-top: 25px;
+    }
+    .section ul {
+      padding-left: 20px;
+    }
+    .highlight {
+      background: #3b4565;
+      padding: 15px;
+      border-left: 5px solid #66aaff;
+      margin: 25px 0;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #1c2230;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      border-top: 1px solid #ccc;
+    }
+    footer .footer-links {
+      margin-bottom: 15px;
+    }
+    footer .footer-links a {
+      margin: 0 10px;
+      color: #ddd;
+      text-decoration: none;
+    }
+    footer .footer-links a:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <button class="menu-toggle">&#9776;</button>
+    <h1><a href="index.html">Fada-Voice</a></h1>
+  </header>
+
+  <!-- NAVBAR -->
+  <div class="navbar" id="navbar">
+    <div>
+      <div class="navbar-header">
+        <h2>Fada-Voice</h2>
+        <button class="close-btn" id="closeBtn">&times;</button>
+      </div>
+      <a href="index.html">Home</a>
+      <a href="topics.html">Topics</a>
+      <a href="featured.html">Featured Post</a>
+      <a href="latest.html">Recent Post</a>
+      <a href="about.html">About Us</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="contact.html">Contact</a>
+      <a href="advertise.html">Advertise</a>
+    </div>
+    <div class="navbar-footer">
+      <p>Copyright 2025 © Fada-Voice <br>Developed by Titan</p>
+    </div>
+  </div>
+
+  <!-- ADVERTISE CONTENT -->
+  <div class="container">
+    <h2>Advertise with Us</h2>
+    <p>
+      Fada-Voice offers a unique platform for advertisers looking to reach a culturally engaged, socially conscious, and active Nigerian audience. Collaborate with us to make your brand visible and trusted.
+    </p>
+
+    <div class="section">
+      <h2>Why Choose Fada-Voice?</h2>
+      <ul>
+        <li>Extensive reach across Nigeria and the diaspora.</li>
+        <li>Audience passionate about faith, culture, sports, and activism.</li>
+        <li>Trusted platform with meaningful and impactful content.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Advertising Options</h2>
+      <ul>
+        <li>Homepage banner ads</li>
+        <li>Sponsored articles and posts</li>
+        <li>Event promotion and coverage</li>
+        <li>Social media campaigns and shout-outs</li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <h2>Contact Us to Advertise</h2>
+      <p>Reach out to our advertising team to get a custom package for your brand. We’ll help you create impactful campaigns that resonate with our audience.</p>
+      <p><strong>Email:</strong> advertise@fadavoice.com</p>
+      <p><strong>Phone:</strong> +234 800 123 4567</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About Us</a> | 
+      <a href="privacy.html">Privacy Policy</a> | 
+      <a href="advertise.html">Advertise</a> | 
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>&copy; 2025 Fada-Voice. All rights reserved.</p>
+  </footer>
+
+  <!-- NAV SCRIPT -->
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navbar = document.getElementById('navbar');
+    const closeBtn = document.getElementById('closeBtn');
+
+    menuToggle.addEventListener('click', () => {
+      navbar.classList.add('active');
+    });
+    closeBtn.addEventListener('click', () => {
+      navbar.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
