@@ -4,19 +4,31 @@
   <meta charset="UTF-8">
   <title>Full Article</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Font Awesome (via Cloudflare CDN) -->
+
+  <!-- Default OG Tags (will be updated dynamically) -->
+  <meta property="og:title" content="Fada-Voice News">
+  <meta property="og:description" content="Latest breaking news from Fada-Voice.">
+  <meta property="og:image" content="https://yourwebsite.com/default-thumbnail.jpg">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fada-Voice">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fada-Voice News">
+  <meta name="twitter:description" content="Stay informed with Fada-Voice.">
+  <meta name="twitter:image" content="https://yourwebsite.com/default-thumbnail.jpg">
+
+  <!-- Font Awesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="articlessss.css">
 </head>
 <body>
   <!-- HEADER -->
   <header>
     <button class="menu-toggle">&#9776;</button>
-    <h1><a href="index.html">Fada-Voice </a></h1>
+    <h1><a href="index.html">Fada-Voice</a></h1>
   </header>
 
   <!-- NAVBAR -->
@@ -57,16 +69,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // Toggle Navbar
+    // Navbar toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navbar = document.getElementById('navbar');
     const closeBtn = document.getElementById('closeBtn');
-    menuToggle.addEventListener('click', () => {
-      navbar.classList.add('active');
-    });
-    closeBtn.addEventListener('click', () => {
-      navbar.classList.remove('active');
-    });
+    menuToggle.addEventListener('click', () => navbar.classList.add('active'));
+    closeBtn.addEventListener('click', () => navbar.classList.remove('active'));
 
     // Firebase Config
     const firebaseConfig = {
@@ -92,7 +100,7 @@
 
       const docRef = db.collection("newsPosts").doc(articleId);
 
-      // 🔹 Increment views inside a transaction
+      // Increment views
       await db.runTransaction(async (transaction) => {
         const current = await transaction.get(docRef);
         if (!current.exists) return;
@@ -100,7 +108,6 @@
         transaction.update(docRef, { views: views + 1 });
       });
 
-      // 🔹 Get updated article
       const doc = await docRef.get();
       if (!doc.exists) {
         articleContainer.innerHTML = "<p>Article not found.</p>";
@@ -108,35 +115,47 @@
       }
       const article = doc.data();
 
-      // 🔹 Fetch Author
+      // Fetch author
       let authorName = "Unknown Author";
-      let authorId = "";
       if (article.authorId) {
         const authorDoc = await db.collection("authors").doc(article.authorId).get();
-        if (authorDoc.exists) {
-          authorName = authorDoc.data().name;
-          authorId = authorDoc.id;
-        }
+        if (authorDoc.exists) authorName = authorDoc.data().name;
       }
 
       const publishedDate = new Date(article.timestamp).toLocaleDateString();
 
-      // 🔹 Render Article
+      // 🧠 Dynamically update meta tags
+      document.title = article.title;
+      updateMetaTag('meta[property="og:title"]', article.title);
+      updateMetaTag('meta[property="og:description"]', article.description || article.content.substring(0, 120));
+      updateMetaTag('meta[property="og:image"]', article.imageUrl || 'https://yourwebsite.com/default-thumbnail.jpg');
+      updateMetaTag('meta[property="og:url"]', window.location.href);
+
+      updateMetaTag('meta[name="twitter:title"]', article.title);
+      updateMetaTag('meta[name="twitter:description"]', article.description || article.content.substring(0, 120));
+      updateMetaTag('meta[name="twitter:image"]', article.imageUrl || 'https://yourwebsite.com/default-thumbnail.jpg');
+
+      // Render Article
       articleContainer.innerHTML = `
         <div class="article-image">${article.imageUrl ? `<img src="${article.imageUrl}" alt="Article Image">` : ''}</div>
         <div class="article-details">
           <span>Category: ${article.category || 'N/A'}</span> | 
           <span>Published: ${publishedDate}</span> | 
-          <span>Author: <a class="author-link" href="author.html?id=${authorId}">${authorName}</a></span> | 
+          <span>Author: ${authorName}</span> | 
           <span>👁️ Views: ${article.views ? article.views + 1 : 1}</span>
         </div>
         <h2 class="article-title">${article.title}</h2>
         <div class="article-content">${article.content.replace(/\n/g, '<br>')}</div>
+
         <div class="share-buttons">
+          <h3>Share this article:</h3>
           <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-facebook"><i class="fab fa-facebook-f"></i></a>
           <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" class="share-twitter"><i class="fab fa-twitter"></i></a>
           <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}" target="_blank" class="share-whatsapp"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" class="share-telegram"><i class="fab fa-telegram-plane"></i></a>
+          <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(article.title)}" target="_blank" class="share-linkedin"><i class="fab fa-linkedin-in"></i></a>
         </div>
+
         <div class="featured-section">
           <h3>🌟 Featured News</h3>
           <div class="featured-posts" id="featuredPosts">Loading featured posts...</div>
@@ -144,6 +163,11 @@
       `;
 
       loadFeaturedPosts();
+    }
+
+    function updateMetaTag(selector, content) {
+      const tag = document.querySelector(selector);
+      if (tag) tag.setAttribute('content', content);
     }
 
     async function loadFeaturedPosts() {
@@ -163,7 +187,7 @@
         div.className = "featured-post-card";
         div.innerHTML = `
           ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post Image">` : ''}
-          <h4><a href="article.html?id=${doc.id}">${post.title}</a></h4>
+          <h4><a href="post.html?id=${doc.id}">${post.title}</a></h4>
         `;
         featuredContainer.appendChild(div);
       });
