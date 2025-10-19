@@ -4,221 +4,27 @@
   <meta charset="UTF-8">
   <title>Full Article</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Font Awesome -->
+
+  <!-- Default OG Tags (will be updated dynamically) -->
+  <meta property="og:title" content="Fada-Voice News">
+  <meta property="og:description" content="Latest breaking news from Fada-Voice.">
+  <meta property="og:image" content="https://yourwebsite.com/default-thumbnail.jpg">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fada-Voice">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fada-Voice News">
+  <meta name="twitter:description" content="Stay informed with Fada-Voice.">
+  <meta name="twitter:image" content="https://yourwebsite.com/default-thumbnail.jpg">
+
+  <!-- Font Awesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <style>
-    body {
-      font-family: 'Noto Sans', sans-serif;
-      margin: 0;
-      background: #f9f9f9;
-      color: #333;
-    }
-
-    header {
-      background: #007bff;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      position: relative;
-    }
-
-    header h1 a {
-      color: white;
-      text-decoration: none;
-    }
-
-    .menu-toggle {
-      position: absolute;
-      left: 15px;
-      top: 15px;
-      background: none;
-      color: white;
-      font-size: 24px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .navbar {
-      display: none;
-      background: #222;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      padding-top: 60px;
-      z-index: 1000;
-      flex-direction: column;
-    }
-
-    .navbar.active {
-      display: flex;
-    }
-
-    .navbar a {
-      color: white;
-      padding: 15px;
-      text-decoration: none;
-      display: block;
-      transition: 0.3s;
-    }
-
-    .navbar a:hover {
-      background: #444;
-    }
-
-    .close-btn {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      font-size: 28px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .article-image img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-
-    .article-details {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 15px;
-    }
-
-    .article-title {
-      font-size: 24px;
-      color: #222;
-      margin-bottom: 15px;
-    }
-
-    .article-content {
-      font-size: 17px;
-      line-height: 1.7;
-      color: #444;
-      margin-bottom: 25px;
-    }
-
-    .share-buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-
-    .share-buttons a,
-    .copy-link-btn {
-      background: #007bff;
-      color: white;
-      padding: 10px 12px;
-      border-radius: 50%;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .share-buttons a:hover,
-    .copy-link-btn:hover {
-      background: #0056b3;
-    }
-
-    .featured-section {
-      margin-top: 40px;
-    }
-
-    .featured-posts {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 15px;
-    }
-
-    .featured-post-card {
-      background: #f3f3f3;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-    }
-
-    .featured-post-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
-
-    .featured-post-card h4 {
-      margin: 10px;
-      font-size: 16px;
-    }
-
-    .featured-post-card a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    footer {
-      background: #222;
-      color: #aaa;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-
-    footer a {
-      color: #aaa;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      color: white;
-    }
-
-    .social-icons a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-    }
-
-    /* ✅ Toast Message */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #333;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.4s ease;
-      z-index: 1000;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="articlessss.css">
 </head>
 <body>
-
   <!-- HEADER -->
   <header>
     <button class="menu-toggle">&#9776;</button>
@@ -237,7 +43,7 @@
     <a href="contact.html">Contact Us</a>
   </div>
 
-  <!-- ARTICLE -->
+  <!-- ARTICLE CONTENT -->
   <div class="container" id="articleContainer">
     <p>Loading article...</p>
   </div>
@@ -258,21 +64,19 @@
     </div>
   </footer>
 
-  <div id="toast" class="toast">✅ Link copied!</div>
-
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // 🔹 Navbar Toggle
+    // Navbar toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navbar = document.getElementById('navbar');
     const closeBtn = document.getElementById('closeBtn');
     menuToggle.addEventListener('click', () => navbar.classList.add('active'));
     closeBtn.addEventListener('click', () => navbar.classList.remove('active'));
 
-    // 🔹 Firebase Config
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyAtVvPjdsj84mWqaG4-7SyjbljCnslZ1SM",
       authDomain: "hendaa-1.firebaseapp.com",
@@ -298,9 +102,9 @@
 
       // Increment views
       await db.runTransaction(async (transaction) => {
-        const docSnap = await transaction.get(docRef);
-        if (!docSnap.exists) return;
-        const views = docSnap.data().views || 0;
+        const current = await transaction.get(docRef);
+        if (!current.exists) return;
+        const views = current.data().views || 0;
         transaction.update(docRef, { views: views + 1 });
       });
 
@@ -309,36 +113,47 @@
         articleContainer.innerHTML = "<p>Article not found.</p>";
         return;
       }
-
       const article = doc.data();
+
+      // Fetch author
       let authorName = "Unknown Author";
-      let authorId = "";
       if (article.authorId) {
         const authorDoc = await db.collection("authors").doc(article.authorId).get();
-        if (authorDoc.exists) {
-          authorName = authorDoc.data().name;
-          authorId = authorDoc.id;
-        }
+        if (authorDoc.exists) authorName = authorDoc.data().name;
       }
 
       const publishedDate = new Date(article.timestamp).toLocaleDateString();
 
+      // 🧠 Dynamically update meta tags
+      document.title = article.title;
+      updateMetaTag('meta[property="og:title"]', article.title);
+      updateMetaTag('meta[property="og:description"]', article.description || article.content.substring(0, 120));
+      updateMetaTag('meta[property="og:image"]', article.imageUrl || 'https://yourwebsite.com/default-thumbnail.jpg');
+      updateMetaTag('meta[property="og:url"]', window.location.href);
+
+      updateMetaTag('meta[name="twitter:title"]', article.title);
+      updateMetaTag('meta[name="twitter:description"]', article.description || article.content.substring(0, 120));
+      updateMetaTag('meta[name="twitter:image"]', article.imageUrl || 'https://yourwebsite.com/default-thumbnail.jpg');
+
+      // Render Article
       articleContainer.innerHTML = `
         <div class="article-image">${article.imageUrl ? `<img src="${article.imageUrl}" alt="Article Image">` : ''}</div>
         <div class="article-details">
           <span>Category: ${article.category || 'N/A'}</span> | 
           <span>Published: ${publishedDate}</span> | 
-          <span>Author: <a class="author-link" href="author.html?id=${authorId}">${authorName}</a></span> | 
+          <span>Author: ${authorName}</span> | 
           <span>👁️ Views: ${article.views ? article.views + 1 : 1}</span>
         </div>
         <h2 class="article-title">${article.title}</h2>
         <div class="article-content">${article.content.replace(/\n/g, '<br>')}</div>
 
         <div class="share-buttons">
-          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-          <button id="copyLinkBtn" class="copy-link-btn" title="Copy Link"><i class="fas fa-link"></i></button>
+          <h3>Share this article:</h3>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" class="share-twitter"><i class="fab fa-twitter"></i></a>
+          <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(article.title + ' ' + window.location.href)}" target="_blank" class="share-whatsapp"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}" target="_blank" class="share-telegram"><i class="fab fa-telegram-plane"></i></a>
+          <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(article.title)}" target="_blank" class="share-linkedin"><i class="fab fa-linkedin-in"></i></a>
         </div>
 
         <div class="featured-section">
@@ -348,6 +163,11 @@
       `;
 
       loadFeaturedPosts();
+    }
+
+    function updateMetaTag(selector, content) {
+      const tag = document.querySelector(selector);
+      if (tag) tag.setAttribute('content', content);
     }
 
     async function loadFeaturedPosts() {
@@ -372,20 +192,6 @@
         featuredContainer.appendChild(div);
       });
     }
-
-    // ✅ Copy Link Functionality with Toast
-    document.addEventListener("click", (e) => {
-      if (e.target.closest("#copyLinkBtn")) {
-        const title = document.querySelector(".article-title")?.innerText || document.title;
-        const url = window.location.href;
-        const textToCopy = `${title} - ${url}`;
-        navigator.clipboard.writeText(textToCopy);
-
-        const toast = document.getElementById("toast");
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 2500);
-      }
-    });
 
     loadArticle();
   </script>
